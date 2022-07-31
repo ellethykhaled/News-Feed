@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".Home"
+    android:layout_marginBottom="12dp">
+
+
+    <ImageView
+        android:id="@+id/articleImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/articleimage" />
+
+    <TextView
+        android:id="@+id/articleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="21dp"
+        android:fontFamily="@font/cairo"
+        android:lineSpacingExtra="-10dp"
+        android:text="Are you a programmer struggling to stay
+motivated? Here are 5 tips you need
+to know"
+        android:textColor="#484848"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/articleAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="-4dp"
+        android:fontFamily="@font/cairo"
+        android:text="By .cult"
+        android:textColor="#B5B5B5"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/articleDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="21dp"
+        android:fontFamily="@font/cairo"
+        android:text="April 3, 2017"
+        android:textColor="#B5B5B5"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_gravity="right"/>
+</LinearLayout>

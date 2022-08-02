@@ -1,4 +1,4 @@
-package com.example.newsfeed.ui.main.adapter
+package com.example.newsfeed.ui.home.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context

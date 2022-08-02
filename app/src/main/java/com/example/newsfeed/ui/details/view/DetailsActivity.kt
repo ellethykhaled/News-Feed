@@ -1,4 +1,4 @@
-package com.example.newsfeed.ui.view
+package com.example.newsfeed.ui.details.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +13,7 @@ class DetailsActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        setContentView(R.layout.layout_details)
+        setContentView(R.layout.activity_details)
 
         backButton = findViewById(R.id.backButton)
 

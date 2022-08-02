@@ -1,4 +1,4 @@
-package com.example.newsfeed.ui.view
+package com.example.newsfeed.ui.home.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
-import com.example.newsfeed.ui.main.adapter.ArticleAdapter
+import com.example.newsfeed.ui.home.adapter.ArticleAdapter
 import com.example.newsfeed.R
 import com.example.newsfeed.data.model.Article
+import com.example.newsfeed.ui.details.view.DetailsActivity
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +17,7 @@ class HomeActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        setContentView(R.layout.layout_home)
+        setContentView(R.layout.activity_home)
 
         val lvArticle: ListView = findViewById(R.id.lvarticle)
 

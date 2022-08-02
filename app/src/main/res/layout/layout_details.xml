@@ -6,23 +6,23 @@
     android:layout_height="match_parent"
     android:background="#EBEBEB"
     android:orientation="vertical"
-    tools:context=".Details">
+    tools:context=".ui.view.DetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/actionBar"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:src="@drawable/backicon"
+            android:src="@drawable/back_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,16 +49,16 @@
         android:layout_margin="20dp"
         android:background="@color/white"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/actionBar"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/websiteButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/websiteButton">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionBar">
 
         <ImageView
             android:id="@+id/articleImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/articleimage" />
+            android:src="@drawable/article_image" />
 
         <TextView
             android:id="@+id/articleTitle"
@@ -115,27 +115,27 @@ to know"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="21dp"
             android:fontFamily="@font/cairo"
             android:text="This is some description"
             android:textColor="#B5B5B5"
             android:textSize="14sp"
-            android:layout_marginTop="20dp"
             android:textStyle="bold" />
     </LinearLayout>
-    
-    <Button
-        android:background="@color/black"
-        android:id="@+id/websiteButton"
-        android:text="OPEN WEBSITE"
-        android:layout_width="match_parent"
-        android:layout_marginStart="21dp"
-        android:layout_marginBottom="36dp"
-        android:layout_marginEnd="21dp"
-        android:layout_height="62dp"
 
+    <Button
+        android:id="@+id/websiteButton"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="36dp"
+        android:background="@color/black"
+        android:text="OPEN WEBSITE"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

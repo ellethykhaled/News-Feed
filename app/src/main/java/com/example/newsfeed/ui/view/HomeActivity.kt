@@ -1,30 +1,26 @@
-package com.example.newsfeed
+package com.example.newsfeed.ui.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ListView
+import com.example.newsfeed.ui.main.adapter.ArticleAdapter
+import com.example.newsfeed.R
+import com.example.newsfeed.data.model.Article
 
-class Home : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+
         supportActionBar?.hide()
-        window.decorView.apply {
-            systemUiVisibility =
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
-        setContentView(R.layout.home)
+
+        setContentView(R.layout.layout_home)
 
         val lvArticle: ListView = findViewById(R.id.lvarticle)
 
-        val a1 = Article("Some Title", "Author", "12-2-2000")
+        val a1 = Article("Some Title", "Author", "12-2-2000", "")
 
         val articleList = ArrayList<Article>()
 
@@ -37,7 +33,7 @@ class Home : AppCompatActivity() {
         lvArticle.adapter = articleAdapter
 
         lvArticle.setOnItemClickListener { adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
-            val intent = Intent(this, Details::class.java)
+            val intent = Intent(this, DetailsActivity::class.java)
             //intent.putExtra()
             startActivity(intent)
         }

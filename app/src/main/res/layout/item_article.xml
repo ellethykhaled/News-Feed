@@ -6,15 +6,15 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".Home"
-    android:layout_marginBottom="12dp">
+    tools:context=".ui.view.HomeActivity"
+    android:layout_marginBottom="20dp">
 
 
     <ImageView
         android:id="@+id/articleImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/articleimage" />
+        android:src="@drawable/article_image" />
 
     <TextView
         android:id="@+id/articleTitle"
@@ -39,7 +39,7 @@ to know"
         android:layout_marginTop="-4dp"
         android:fontFamily="@font/cairo"
         android:text="By .cult"
-        android:textColor="#B5B5B5"
+        android:textColor="#707070"
         android:textSize="14sp"
         android:textStyle="bold" />
     <TextView

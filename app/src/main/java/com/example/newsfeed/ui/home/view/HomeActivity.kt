@@ -6,20 +6,25 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
+import androidx.databinding.DataBindingUtil
 import com.example.newsfeed.ui.home.adapter.ArticleAdapter
 import com.example.newsfeed.R
 import com.example.newsfeed.data.model.Article
+import com.example.newsfeed.databinding.ActivityHomeBinding
 import com.example.newsfeed.ui.details.view.DetailsActivity
 
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityHomeBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.hide()
 
-        setContentView(R.layout.activity_home)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-        val lvArticle: ListView = findViewById(R.id.lvarticle)
+        val lvArticle: ListView = findViewById(R.id.listview_article)
 
         val a1 = Article("Some Title", "Author", "12-2-2000", "")
 

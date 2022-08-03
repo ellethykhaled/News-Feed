@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="article"
+            type="com.example.newsfeed.data.model.Article" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/article_card_view"
+        android:background="@color/white"
+        app:cardCornerRadius="1dp"
+        app:cardElevation="3dp"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+
+            <ImageView
+                android:id="@+id/article_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/article_image" />
+
+            <TextView
+                android:id="@+id/article_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginEnd="21dp"
+                android:fontFamily="@font/cairo"
+                android:lineSpacingExtra="-10dp"
+                android:text="@{article.title}"
+                android:textColor="#484848"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/article_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="-4dp"
+                android:fontFamily="@font/cairo"
+                android:text="@{article.author}"
+                android:textColor="#707070"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/article_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="21dp"
+                android:fontFamily="@font/cairo"
+                android:text="@{article.date}"
+                android:textColor="#B5B5B5"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_gravity="right" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -55,13 +55,13 @@
         app:layout_constraintTop_toBottomOf="@id/actionBar">
 
         <ImageView
-            android:id="@+id/articleImage"
+            android:id="@+id/article_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/article_image" />
 
         <TextView
-            android:id="@+id/articleTitle"
+            android:id="@+id/article_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="21dp"
@@ -81,7 +81,7 @@ to know"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/articleAuthor"
+                android:id="@+id/article_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
@@ -95,7 +95,7 @@ to know"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/articleDate"
+                android:id="@+id/article_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="21dp"

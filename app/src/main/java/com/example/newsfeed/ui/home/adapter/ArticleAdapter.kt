@@ -1,41 +1,35 @@
 package com.example.newsfeed.ui.home.adapter
 
-import android.annotation.SuppressLint
-import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.TextView
-import com.example.newsfeed.R
+import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.data.model.Article
+import com.example.newsfeed.databinding.ItemArticleCardViewBinding
+import com.example.newsfeed.ui.details.view.DetailsActivity
 
+class ArticleAdapter(private val articles: List<Article>) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
-class ArticleAdapter(private val context: Context, private val arrayList: ArrayList<Article>) : BaseAdapter() {
-    private lateinit var articleTitleTextView: TextView
-    private lateinit var articleAuthorTextView: TextView
-    private lateinit var articleDateTextView: TextView
+    inner class ViewHolder(private val itemBinding: ItemArticleCardViewBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
-    override fun getCount(): Int {
-        return arrayList.size
+        fun bind(position: Int) {
+            itemBinding.article = articles[position]
+
+        }
     }
-    override fun getItem(position: Int): Any {
-        return position
-    }
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-    @SuppressLint("ViewHolder")
-    override fun getView(position: Int, convView: View?, parent: ViewGroup): View? {
-        var convertView = convView
-        convertView = LayoutInflater.from(context).inflate(R.layout.item_article, parent, false)
-        articleTitleTextView = convertView.findViewById(R.id.articleTitle)
-        articleAuthorTextView = convertView.findViewById(R.id.articleAuthor)
-        articleDateTextView = convertView.findViewById(R.id.articleDate)
 
-        articleTitleTextView.text = arrayList[position].title
-        articleAuthorTextView.text = arrayList[position].author
-        articleDateTextView.text = arrayList[position].date
-        return convertView
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val listItemBinding = ItemArticleCardViewBinding.inflate(inflater, parent, false)
+
+        return ViewHolder(listItemBinding)
+    }
+
+    override fun onBindViewHolder(holder: ArticleAdapter.ViewHolder, position: Int) {
+        holder.bind(position)
+    }
+
+    override fun getItemCount(): Int {
+        return articles.size
     }
 }

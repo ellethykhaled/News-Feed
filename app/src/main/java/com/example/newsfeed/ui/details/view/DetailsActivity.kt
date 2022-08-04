@@ -3,21 +3,23 @@ package com.example.newsfeed.ui.details.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
 import com.example.newsfeed.R
+import com.example.newsfeed.databinding.ActivityDetailsBinding
 
 class DetailsActivity : AppCompatActivity() {
     lateinit var backButton : ImageView
+
+    private lateinit var binding: ActivityDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         supportActionBar?.hide()
 
-        setContentView(R.layout.activity_details)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_details)
 
-        backButton = findViewById(R.id.backButton)
-
-        backButton.setOnClickListener { finish() }
+        binding.backButton.setOnClickListener { finish() }
     }
 
 }

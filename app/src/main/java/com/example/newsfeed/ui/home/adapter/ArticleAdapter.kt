@@ -8,13 +8,17 @@ import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.databinding.ItemArticleCardViewBinding
 import com.example.newsfeed.ui.details.view.DetailsActivity
 
-class ArticleAdapter(private val articles: List<Article>) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+class ArticleAdapter(private val articles: List<Article>, private val callback: Callback) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val itemBinding: ItemArticleCardViewBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(position: Int) {
-            itemBinding.article = articles[position]
+            val itemViewModel = articles[position]
+            itemBinding.article = itemViewModel
 
+            itemBinding.root.setOnClickListener{
+                callback.onArticleClick(itemViewModel)
+            }
         }
     }
 
@@ -31,5 +35,9 @@ class ArticleAdapter(private val articles: List<Article>) : RecyclerView.Adapter
 
     override fun getItemCount(): Int {
         return articles.size
+    }
+
+    interface Callback {
+        fun onArticleClick(item: Article)
     }
 }

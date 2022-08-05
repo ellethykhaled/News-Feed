@@ -12,7 +12,7 @@ import com.example.newsfeed.databinding.ActivityHomeBinding
 import com.example.newsfeed.ui.details.view.DetailsActivity
 import com.example.newsfeed.ui.home.adapter.ArticleAdapter
 
-class HomeActivity : AppCompatActivity(){
+class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var manager: RecyclerView.LayoutManager
@@ -31,10 +31,19 @@ class HomeActivity : AppCompatActivity(){
         manager = LinearLayoutManager(this)
 
         binding.recyclerViewArticle.apply {
-            adapter = ArticleAdapter(articles)
+            adapter = ArticleAdapter(articles, this@HomeActivity)
 
             layoutManager = manager
         }
+    }
 
+    private fun openDetailsActivity(item: Article) {
+        val intent = Intent(this, DetailsActivity::class.java)
+        intent.putExtra(DetailsActivity.ARTICLE_DATA, item)
+        startActivity(intent)
+    }
+
+    override fun onArticleClick(item: Article) {
+        openDetailsActivity(item)
     }
 }

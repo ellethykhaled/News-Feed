@@ -1,12 +1,10 @@
 package com.example.newsfeed.ui.home.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.databinding.ItemArticleCardViewBinding
-import com.example.newsfeed.ui.details.view.DetailsActivity
 
 class ArticleAdapter(private val articles: List<Article>, private val callback: Callback) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 

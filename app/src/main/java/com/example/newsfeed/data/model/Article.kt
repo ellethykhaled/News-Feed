@@ -3,9 +3,10 @@ package com.example.newsfeed.data.model
 import java.io.Serializable
 
 class Article(
-    val title: String,
     val author: String,
-    val date: String,
+    val title: String,
     val description: String,
-    val image: String
+    val url: String,
+    val urlToImage: String,
+    val date: String
 ) : Serializable

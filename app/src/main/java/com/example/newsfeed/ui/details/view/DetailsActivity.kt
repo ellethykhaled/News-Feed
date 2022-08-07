@@ -2,7 +2,6 @@ package com.example.newsfeed.ui.details.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import com.example.newsfeed.R
 import com.example.newsfeed.data.model.Article

@@ -1,13 +1,13 @@
-package com.example.newsfeed.data.api
+package com.example.newsfeed.data.repository.api
 
-import com.example.newsfeed.data.model.ArticlesResponse
+import com.example.newsfeed.data.repository.ArticlesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RetroServiceInterface {
 
-    @GET("v1")
+    @GET("articles")
     fun getArticleResponse(
         @Query("source") source: String,
         @Query("apiKey") apiKey: String

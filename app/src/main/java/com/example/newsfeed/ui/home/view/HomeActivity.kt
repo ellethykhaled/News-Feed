@@ -47,8 +47,10 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
     private fun initViewModel() {
         val viewModel: HomeActivityViewModel =
             ViewModelProvider(this).get(HomeActivityViewModel::class.java)
+        viewModel.makeAPICall()
         viewModel.getLiveDataObserver().observe(this, Observer {
             if (it != null) {
+                //Just used for testing
                 Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show()
             }
             else {
@@ -56,7 +58,6 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
             }
         })
-        viewModel.makeAPICall()
     }
 
 

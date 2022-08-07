@@ -49,7 +49,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
             ViewModelProvider(this).get(HomeActivityViewModel::class.java)
         viewModel.getLiveDataObserver().observe(this, Observer {
             if (it != null) {
-
+                Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show()
             }
             else {
                 //Just used for testing

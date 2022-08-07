@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="21dp"
                 android:fontFamily="@font/cairo"
-                android:text="@{article.date}"
+                android:text="@{article.publishedAt}"
                 android:textColor="#B5B5B5"
                 android:textSize="14sp"
                 android:textStyle="bold"

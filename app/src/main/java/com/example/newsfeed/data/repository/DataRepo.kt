@@ -27,13 +27,10 @@ class DataRepo {
                 call: Call<ArticlesResponse>,
                 response: Response<ArticlesResponse>
             ) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful)
                     liveData.postValue(response.body()?.articles)
-                } else
+                else
                     liveData.postValue(null)
-
-                Log.e("API Status", response.body()?.status.toString())
-                Log.e("Response Size", response.body()?.articles?.size.toString())
             }
         })
     }

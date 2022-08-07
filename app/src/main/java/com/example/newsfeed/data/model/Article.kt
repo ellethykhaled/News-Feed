@@ -8,5 +8,5 @@ class Article(
     val description: String,
     val url: String,
     val urlToImage: String,
-    val date: String
+    val publishedAt: String
 ) : Serializable

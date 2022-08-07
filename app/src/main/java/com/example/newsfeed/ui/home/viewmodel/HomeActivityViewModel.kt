@@ -1,5 +1,6 @@
 package com.example.newsfeed.ui.home.viewmodel
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.newsfeed.data.model.Article
@@ -16,6 +17,7 @@ class HomeActivityViewModel : ViewModel() {
         articleAdapter = adapter
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setArticleAdapterData(data: List<Article>) {
         articleAdapter.setArticles(data)
         articleAdapter.notifyDataSetChanged()

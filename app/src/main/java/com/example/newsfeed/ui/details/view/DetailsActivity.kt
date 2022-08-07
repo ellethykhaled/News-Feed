@@ -1,5 +1,7 @@
 package com.example.newsfeed.ui.details.view
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -29,5 +31,14 @@ class DetailsActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener {
             this.onBackPressed()
         }
+
+        binding.websiteButton.setOnClickListener {
+            openWebsite(chosenArticle.url)
+        }
+    }
+
+    private fun openWebsite(url: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browserIntent)
     }
 }

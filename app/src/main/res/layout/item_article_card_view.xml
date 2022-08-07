@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.example.newsfeed.utilis.BindingAdapterUtilisKt"/>
+
         <variable
             name="article"
             type="com.example.newsfeed.data.model.Article" />
@@ -28,9 +28,9 @@
 
             <ImageView
                 android:id="@+id/article_image"
+                imageUrl="@{article.urlToImage}"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                imageUrl="@{article.urlToImage}" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/article_title"

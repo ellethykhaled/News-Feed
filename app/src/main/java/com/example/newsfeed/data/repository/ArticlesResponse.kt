@@ -8,7 +8,7 @@ class ArticlesResponse {
     var status: String? = null
     var source: String? = null
     var sortBy: String? = null
-    var articles: ArrayList<Article>? = null
+    var articles: List<Article>? = null
 
     companion object {
         fun createInstance(jsonString: String): ArticlesResponse? {

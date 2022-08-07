@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.databinding.ItemArticleCardViewBinding
 
-class ArticleAdapter(private val articles: List<Article>, private val callback: Callback) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+class ArticleAdapter(private var articles: List<Article>, private val callback: Callback) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val itemBinding: ItemArticleCardViewBinding) : RecyclerView.ViewHolder(itemBinding.root) {
 
@@ -19,6 +19,12 @@ class ArticleAdapter(private val articles: List<Article>, private val callback: 
             }
         }
     }
+
+    fun setArticles(articles: List<Article>) {
+        this.articles = articles
+    }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

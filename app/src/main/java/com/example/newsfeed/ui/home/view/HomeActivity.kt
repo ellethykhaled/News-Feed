@@ -29,7 +29,6 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-
         manager = LinearLayoutManager(this)
 
         binding.recyclerViewArticle.apply {

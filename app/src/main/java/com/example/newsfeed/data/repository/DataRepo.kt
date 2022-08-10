@@ -33,26 +33,11 @@ class DataRepo {
                 call: Call<ArticlesResponse>,
                 response: Response<ArticlesResponse>
             ) {
-                if (response.isSuccessful) {
-                    formatDate(response.body()?.articles!!)
-
+                if (response.isSuccessful)
                     liveData.postValue(response.body()?.articles)
-                } else
+                else
                     liveData.postValue(null)
             }
         })
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun formatDate(articles: List<Article>) {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        var date: LocalDate
-        for (article in articles) {
-            date = LocalDate.parse(article.publishedAt, formatter)
-            Log.e("Date", date.month.toString())
-            article.publishedAt =
-                date.month.toString().lowercase()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + " " + date.dayOfMonth + ", " + date.year
-        }
     }
 }

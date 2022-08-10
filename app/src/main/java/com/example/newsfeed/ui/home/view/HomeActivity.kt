@@ -1,13 +1,18 @@
 package com.example.newsfeed.ui.home.view
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View.GONE
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.R
@@ -23,6 +28,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var manager: RecyclerView.LayoutManager
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,9 +44,12 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
             layoutManager = manager
         }
 
+        binding.recyclerViewArticle.addItemDecoration(HomeListItemDecorator(20))
+
         initViewModel()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
         val viewModel: HomeActivityViewModel =
             ViewModelProvider(this).get(HomeActivityViewModel::class.java)

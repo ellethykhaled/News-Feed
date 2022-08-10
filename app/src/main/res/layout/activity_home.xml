@@ -60,7 +60,6 @@
             android:layout_height="match_parent"
             android:background="#EBEBEB"
             android:paddingLeft="20dp"
-            android:paddingTop="20dp"
             android:paddingRight="20dp"
             tools:listitem="@layout/item_article_card_view" />
 

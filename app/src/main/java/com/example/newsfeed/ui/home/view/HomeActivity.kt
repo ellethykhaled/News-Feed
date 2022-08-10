@@ -3,6 +3,7 @@ package com.example.newsfeed.ui.home.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -50,6 +51,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
         viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleAdapter)
 
         viewModel.getLiveDataObserver().observe(this, Observer {
+            binding.apiResponseProgressBar.visibility = GONE
             if (it != null)
                 viewModel.setArticleAdapterData(it)
             else

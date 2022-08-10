@@ -1,6 +1,5 @@
 package com.example.newsfeed.data.repository
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -35,7 +34,7 @@ class DataRepo {
                 response: Response<ArticlesResponse>
             ) {
                 if (response.isSuccessful) {
-                    formateDate(response.body()?.articles!!)
+                    formatDate(response.body()?.articles!!)
 
                     liveData.postValue(response.body()?.articles)
                 } else
@@ -45,7 +44,7 @@ class DataRepo {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun formateDate(articles: List<Article>) {
+    private fun formatDate(articles: List<Article>) {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
         var date: LocalDate
         for (article in articles) {

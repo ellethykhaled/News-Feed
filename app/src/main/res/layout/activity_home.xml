@@ -64,5 +64,11 @@
             android:paddingRight="20dp"
             tools:listitem="@layout/item_article_card_view" />
 
+        <ProgressBar
+            android:id="@+id/api_response_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
     </LinearLayout>
 </layout>

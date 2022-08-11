@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.ui.home.adapter.ArticleAdapter
+import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -40,11 +41,13 @@ class HomeActivityViewModel : ViewModel() {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
         var date: LocalDate
         for (article in articles) {
-            date = LocalDate.parse(article.publishedAt, formatter)
-            Log.e("Date", date.month.toString())
-            article.publishedAt =
-                date.month.toString().lowercase()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + " " + date.dayOfMonth + ", " + date.year
+            try {
+                date = LocalDate.parse(article.publishedAt, formatter)
+                article.publishedAt =
+                    date.month.toString().lowercase()
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + " " + date.dayOfMonth + ", " + date.year
+            } catch (e: Exception) {
+            }
         }
     }
 }

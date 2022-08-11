@@ -9,7 +9,7 @@ class RetroInstance {
 
     companion object {
         const val BASE_URL = "https://newsapi.org/v1/"
-        const val API_KEY = "533af958594143758318137469b41ba9"
+        const val API_KEY = "5b9dbdd78c834dc2a5e61584c271b780"
         const val source = "the-next-web"
 
         fun getRetroInstance(): Retrofit {

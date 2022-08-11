@@ -1,18 +1,15 @@
 package com.example.newsfeed.ui.home.view
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View.GONE
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.R
@@ -77,5 +74,19 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback {
 
     override fun onArticleClick(item: Article) {
         openDetailsActivity(item)
+    }
+
+    //Just used for testing
+    private fun createDummyArticles(viewModel: HomeActivityViewModel) {
+        val article = Article(
+            "Khaled",
+            "Test Article",
+            "Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description.",
+            "www.google.com",
+            "",
+            "Some Date"
+        )
+
+        viewModel.liveData.value = listOf(article, article, article, article, article)
     }
 }

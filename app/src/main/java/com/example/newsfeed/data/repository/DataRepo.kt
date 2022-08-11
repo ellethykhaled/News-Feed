@@ -10,9 +10,6 @@ import com.example.newsfeed.data.repository.api.RetroServiceInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class DataRepo {
 

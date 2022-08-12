@@ -2,13 +2,9 @@ package com.example.newsfeed.ui.home.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.newsfeed.R
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.databinding.ItemArticleCardViewBinding
-import com.squareup.picasso.Picasso
 
 class ArticleAdapter(private var articles: List<Article>, private val callback: Callback) :
     RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {

@@ -7,17 +7,15 @@ import io.realm.kotlin.ext.query
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 
-class Database : KodeinAware {
-    override val kodein: Kodein
-        get() = kodein
+class Database(override val kodein: Kodein) : KodeinAware {
 
-    val configuration = RealmConfiguration.create(schema = setOf(Article::class))
+    private val configuration = RealmConfiguration.create(schema = setOf(Article::class))
 
-    val realm = Realm.open(configuration)
+    private val realm = Realm.open(configuration)
 
-    fun write(articles: List<Article>) {
+    fun write(articles: List<Article>?) {
         realm.writeBlocking {
-            articles.forEach {
+            articles?.forEach {
                 copyToRealm(it)
             }
         }
@@ -31,7 +29,17 @@ class Database : KodeinAware {
         }
     }
 
-    fun query(): List<Article> {
+    suspend fun update(articles: List<Article>?) {
+        realm.write {
+            val query = realm.query<Article>()
+            delete(query)
+            articles?.forEach {
+                copyToRealm(it)
+            }
+        }
+    }
+
+    fun query(): List<Article>? {
         return realm.query<Article>().find()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.newsfeed.data.repository.api
+package com.example.newsfeed.data.repository.source.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,13 +16,12 @@ class RetroInstance {
             val loggingInterceptor = HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY)
 
-            val footballDataClient = OkHttpClient().newBuilder()
+            val dataClient = OkHttpClient().newBuilder()
                 .addInterceptor(loggingInterceptor)
                 .build()
 
-            return Retrofit.Builder().client(footballDataClient).baseUrl(BASE_URL)
+            return Retrofit.Builder().client(dataClient).baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build()
-
         }
     }
 

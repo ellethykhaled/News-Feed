@@ -62,8 +62,8 @@ dependencies {
     implementation 'org.kodein.di:kodein-di-generic-jvm:6.1.0'
     implementation 'org.kodein.di:kodein-di-framework-android-x:6.1.0'
 
-    implementation("androidx.room:room-runtime:2.4.3")
-    annotationProcessor("androidx.room:room-compiler:2.4.3")
+    implementation 'androidx.room:room-runtime:2.4.3'
+    kapt 'androidx.room:room-compiler:2.4.3'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

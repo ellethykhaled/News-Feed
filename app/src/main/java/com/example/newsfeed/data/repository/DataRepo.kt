@@ -1,23 +1,22 @@
 package com.example.newsfeed.data.repository
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.api.RetroInstance
-import com.example.newsfeed.data.repository.api.RetroServiceInterface
-import com.example.newsfeed.data.repository.database.ArticleDao
-import com.example.newsfeed.data.repository.database.ArticleDatabase
+import com.example.newsfeed.data.repository.source.api.RetroInstance
+import com.example.newsfeed.data.repository.source.api.RetroServiceInterface
+import com.example.newsfeed.data.repository.source.LocalDataSource
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DataRepo(override val kodein: Kodein, val context: Context) : KodeinAware, ArticleDao {
+class DataRepo(override val kodein: Kodein) : KodeinAware {
 
+    private val localDataSource = LocalDataSource(kodein)
 
     fun getArticles(liveData: MutableLiveData<List<Article>>) {
         val retroInstance = RetroInstance.getRetroInstance()
@@ -28,7 +27,7 @@ class DataRepo(override val kodein: Kodein, val context: Context) : KodeinAware,
         call.enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
                 Log.e("Error", t.toString())
-                liveData.postValue(getArticlesFromDB())
+                liveData.postValue(localDataSource.getArticles())
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -38,34 +37,11 @@ class DataRepo(override val kodein: Kodein, val context: Context) : KodeinAware,
             ) {
                 if (response.isSuccessful) {
                     liveData.postValue(response.body()?.articles)
-                    suspend { updateArticles(response.body()?.articles) }
+                    localDataSource.updateArticles(response.body()?.articles)
 
                 } else
-                    liveData.postValue(getArticlesFromDB())
+                    liveData.postValue(localDataSource.getArticles())
             }
         })
-    }
-
-    override suspend fun updateArticles(articles: List<Article>?) {
-        getArticlesFromDB()?.forEach {
-            deleteArticle(it)
-        }
-        val articleDao = ArticleDatabase.getDatabase(context.applicationContext)?.articleDao()
-        articles?.forEach {
-            articleDao?.insertArticle(it)
-        }
-    }
-
-    override fun getArticlesFromDB(): List<Article>? {
-        val articleDao = ArticleDatabase.getDatabase(context.applicationContext)?.articleDao()
-        return articleDao?.getArticlesFromDB()!!
-    }
-
-    override fun insertArticle(article: Article) {
-        TODO("Not yet implemented")
-    }
-
-    override fun deleteArticle(article: Article?) {
-        TODO("Not yet implemented")
     }
 }

@@ -1,4 +1,4 @@
-package com.example.newsfeed.data.repository.api
+package com.example.newsfeed.data.repository.source.api
 
 import com.example.newsfeed.data.repository.ArticlesResponse
 import retrofit2.Call

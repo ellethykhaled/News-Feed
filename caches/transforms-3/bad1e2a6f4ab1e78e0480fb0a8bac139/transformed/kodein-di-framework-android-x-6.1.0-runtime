@@ -1,0 +1,17 @@
+org.kodein.di.android.x.AndroidLifecycleScope
+org.kodein.di.android.x.AndroidLifecycleScope$getRegistry$$inlined$synchronizedIfNull$lambda$1
+org.kodein.di.android.x.AndroidLifecycleScope$getRegistry$$inlined$synchronizedIfNull$lambda$2
+org.kodein.di.android.x.AndroidLifecycleScope$multiItem
+org.kodein.di.android.x.AndroidLifecycleScope$multiItem$1
+org.kodein.di.android.x.AndroidLifecycleScope$singleItem
+org.kodein.di.android.x.AndroidLifecycleScope$singleItem$1
+org.kodein.di.android.x.BuildConfig
+org.kodein.di.android.x.ClosestKt
+org.kodein.di.android.x.ClosestKt$kodein$1
+org.kodein.di.android.x.ClosestKt$kodein$2
+org.kodein.di.android.x.ModuleKt
+org.kodein.di.android.x.ModuleKt$androidXContextTranslators$1
+org.kodein.di.android.x.ModuleKt$androidXContextTranslators$1$1
+org.kodein.di.android.x.ModuleKt$androidXContextTranslators$1$2
+org.kodein.di.android.x.ModuleKt$androidXContextTranslators$1$3
+org.kodein.di.android.x.ModuleKt$androidXModule$1

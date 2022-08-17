@@ -7,12 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.ui.home.adapter.ArticleAdapter
+import org.kodein.di.Kodein
+import org.kodein.di.KodeinAware
 import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class HomeActivityViewModel : ViewModel() {
+class HomeActivityViewModel(override val kodein: Kodein) : ViewModel(), KodeinAware {
 
     var liveData: MutableLiveData<List<Article>> = MutableLiveData()
 
@@ -49,4 +51,9 @@ class HomeActivityViewModel : ViewModel() {
             }
         }
     }
+
+    suspend fun addArticle (article: Article) {
+
+    }
+
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding='utf-8' standalone='no'?>
+<resources>
+<!-- java/com/google/android/libraries/admob/demo/mediationtestsuite/testsuite/src/main/res/values-v21/dimens.xml -->
+<eat-comment/>
+<dimen name="gmts_card_corner_radius">0dp</dimen>
+<dimen name="gmts_card_elevation">0.25dp</dimen>
+<!-- java/com/google/android/libraries/admob/demo/mediationtestsuite/testsuite/src/main/res/values-v21/styles.xml -->
+<eat-comment/>
+<style name="gmts_FontButtonWhite">
+<item name="android:textSize">13sp</item>
+<item name="android:textColor">@color/gmts_light_text</item>
+<item name="android:fontFamily">sans-serif-medium</item>
+<item name="android:lineSpacingExtra">1dp</item>
+<item name="android:backgroundTint">@color/gmts_blue</item>
+</style>
+<style name="gmts_FontHeadline5">
+<item name="android:textSize">11sp</item>
+<item name="android:textColor">@color/gmts_dark_text_primary</item>
+<item name="android:fontFamily">sans-serif</item>
+<item name="android:lineSpacingExtra">1dp</item>
+<item name="android:letterSpacing">0.073</item>
+<item name="android:textAllCaps">true</item>
+</style>
+</resources>

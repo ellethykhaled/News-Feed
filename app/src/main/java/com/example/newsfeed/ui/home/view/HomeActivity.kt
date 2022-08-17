@@ -59,7 +59,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         val viewModel = ViewModelProviders.of(this, viewModelProviderFactory)
             .get(HomeActivityViewModel::class.java)
 
-        val dataRepo = DataRepo(kodein)
+        val dataRepo = DataRepo(kodein, applicationContext)
         dataRepo.getArticles(viewModel.getLiveDataObserver())
 
         viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleAdapter)

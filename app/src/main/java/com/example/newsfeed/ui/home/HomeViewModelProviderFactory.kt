@@ -10,6 +10,6 @@ class HomeViewModelProviderFactory(override val kodein: Kodein): ViewModelProvid
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HomeActivityViewModel() as T
+        return HomeActivityViewModel(kodein) as T
     }
 }

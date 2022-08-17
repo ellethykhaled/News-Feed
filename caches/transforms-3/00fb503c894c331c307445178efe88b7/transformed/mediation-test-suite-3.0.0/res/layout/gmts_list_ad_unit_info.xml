@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/gmts_CardView.Padding"
+    app:cardElevation="0.25dp"
+    app:cardMaxElevation="0.25dp"
+    >
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/gmts_padding_outer_default"
+    android:paddingRight="@dimen/gmts_padding_outer_default"
+    android:paddingTop="@dimen/gmts_padding_outer_small"
+    android:paddingBottom="@dimen/gmts_padding_outer_medium"
+    >
+
+  <ImageView
+      android:id="@+id/gmts_check_image"
+      android:tint="@color/gmts_ok"
+      android:src="@drawable/gmts_quantum_ic_check_circle_white_24"
+      app:layout_constraintStart_toStartOf="parent"
+      android:paddingEnd="@dimen/gmts_padding_content_medium"
+      android:paddingRight="@dimen/gmts_padding_content_medium"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+  <TextView
+      android:id="@+id/gmts_title_text"
+      app:layout_constraintStart_toEndOf="@id/gmts_check_image"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/gmts_detail_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingEnd="@dimen/gmts_padding_outer_small"
+      android:paddingRight="@dimen/gmts_padding_outer_small"
+      android:maxLines="2"
+      android:textAppearance="@style/gmts_FontHeadline6"
+      android:text="@string/gmts_sdk"
+      />
+
+  <TextView
+      android:id="@+id/gmts_detail_text"
+      app:layout_constraintStart_toEndOf="@id/gmts_check_image"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/gmts_title_text"
+      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:maxLines="2"
+      android:textAppearance="@style/gmts_FontHeadline7"
+      android:text="@string/gmts_found"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView >

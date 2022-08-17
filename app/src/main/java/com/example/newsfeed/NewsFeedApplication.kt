@@ -12,8 +12,6 @@ import org.kodein.di.generic.singleton
 
 class NewsFeedApplication : Application(), KodeinAware {
     override val kodein = Kodein.lazy {
-        //This line some how has the whole application working
-        //Error given earlier: "No binding found for bind<Kodein>() with ? { ? }"
 
         bind() from singleton { Database(kodein) }
 

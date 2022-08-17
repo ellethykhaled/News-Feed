@@ -16,9 +16,8 @@ import retrofit2.Response
 
 class DataRepo(override val kodein: Kodein) : KodeinAware {
 
-    val database = Database(kodein)
 
-    fun makeAPICall(liveData: MutableLiveData<List<Article>>) {
+    fun getArticles(liveData: MutableLiveData<List<Article>>) {
         val retroInstance = RetroInstance.getRetroInstance()
         val retroService = retroInstance.create(RetroServiceInterface::class.java)
 
@@ -27,7 +26,7 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
         call.enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
                 Log.e("Error", t.toString())
-                liveData.postValue(database.query())
+                liveData.postValue(null)
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -40,7 +39,7 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
                     //suspend { database.update(response.body()?.articles) }
 
                 } else
-                    liveData.postValue(database.query())
+                    liveData.postValue(null)
             }
         })
     }

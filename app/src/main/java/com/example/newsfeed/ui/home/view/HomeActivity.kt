@@ -3,7 +3,9 @@ package com.example.newsfeed.ui.home.view
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -65,7 +67,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleAdapter)
 
         viewModel.getLiveDataObserver().observe(this, Observer {
-            binding.apiResponseProgressBar.visibility = GONE
+            loadingDelay()
             if (it != null)
                 viewModel.setArticleAdapterData(it)
             else
@@ -84,6 +86,13 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         openDetailsActivity(item)
     }
 
+    private fun loadingDelay() {
+        Handler().postDelayed({
+            binding.apiResponseProgressBar.visibility = GONE
+            binding.recyclerViewArticle.visibility = VISIBLE
+        }, 500)
+    }
+
     //Just used for testing
     private fun createDummyArticles(viewModel: HomeActivityViewModel) {
         val article = Article(
@@ -94,7 +103,6 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
             "",
             "Some Date"
         )
-
         viewModel.liveData.value = listOf(article, article, article, article, article)
     }
 }

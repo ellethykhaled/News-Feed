@@ -29,7 +29,7 @@ class RemoteDataSource(override val kodein: Kodein) : KodeinAware {
 
         call.enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
-                data.value = DataWrapper.Failure()
+                data.value = DataWrapper.Failure(t.toString())
             }
 
             @RequiresApi(Build.VERSION_CODES.O)

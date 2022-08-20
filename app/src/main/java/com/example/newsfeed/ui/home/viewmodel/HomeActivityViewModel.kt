@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.newsfeed.data.model.Article
+import com.example.newsfeed.data.repository.DataRepo
+import com.example.newsfeed.data.repository.DataWrapper
 import com.example.newsfeed.ui.home.adapter.ArticleAdapter
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -13,12 +16,18 @@ import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import androidx.lifecycle.LiveData
 
-class HomeActivityViewModel(override val kodein: Kodein) : ViewModel(), KodeinAware {
+class HomeActivityViewModel(override val kodein: Kodein, dataRepo: DataRepo) : ViewModel(), KodeinAware {
 
-    var liveData: MutableLiveData<List<Article>> = MutableLiveData()
+    private val loadData: MutableLiveData<Boolean> = MutableLiveData()
+
+    val liveData: LiveData<DataWrapper<List<Article>>> = Transformations.switchMap(loadData) {
+        dataRepo.getArticles()
+    }
 
     lateinit var articleAdapter: ArticleAdapter
+
 
     @JvmName("setArticleAdapter1")
     fun setArticleAdapter(adapter: ArticleAdapter) {
@@ -33,8 +42,9 @@ class HomeActivityViewModel(override val kodein: Kodein) : ViewModel(), KodeinAw
         articleAdapter.notifyDataSetChanged()
     }
 
-    fun getLiveDataObserver(): MutableLiveData<List<Article>> {
-        return liveData
+
+    fun getArticlesData() {
+        loadData.value = true
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,9 +61,5 @@ class HomeActivityViewModel(override val kodein: Kodein) : ViewModel(), KodeinAw
             }
         }
     }
-
-    suspend fun addArticle (article: Article) {
-
-    }
-
 }
+

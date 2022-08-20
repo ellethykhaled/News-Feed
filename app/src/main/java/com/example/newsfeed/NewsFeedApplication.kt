@@ -21,7 +21,7 @@ class NewsFeedApplication : Application(), KodeinAware {
 
         bind<ArticleDatabase>() with singleton { ArticleDatabase.getDatabase(this@NewsFeedApplication) }
 
-        bind<Retrofit>() with singleton { RetroInstance.getRetroInstance() }
+        bind<Retrofit>() with provider { RetroInstance.getRetroInstance() }
 
         bind() from provider { HomeViewModelProviderFactory(kodein) }
     }

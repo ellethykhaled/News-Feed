@@ -1,19 +1,13 @@
 package com.example.newsfeed.data.repository
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.source.api.RetroInstance
-import com.example.newsfeed.data.repository.source.api.RetroServiceInterface
 import com.example.newsfeed.data.repository.source.LocalDataSource
 import com.example.newsfeed.data.repository.source.RemoteDataSource
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DataRepo(override val kodein: Kodein) : KodeinAware {
 
@@ -21,30 +15,33 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
 
     private val remoteDataSource = RemoteDataSource(kodein)
 
-    fun getArticles(liveData: MutableLiveData<List<Article>>) {
-        val retroInstance = RetroInstance.getRetroInstance()
-        val retroService = retroInstance.create(RetroServiceInterface::class.java)
+    fun getArticles(): LiveData<DataWrapper<List<Article>>> {
+        val data = MediatorLiveData<DataWrapper<List<Article>>>()
 
-        val call = retroService.getArticleResponse(RetroInstance.source, RetroInstance.API_KEY)
+        data.value = DataWrapper.Loading()
 
-        call.enqueue(object : Callback<ArticlesResponse> {
-            override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
-                Log.e("Error", t.toString())
-                liveData.postValue(localDataSource.getArticles().value?.data)
+        val remoteArticles = remoteDataSource.getArticles()
+
+        data.addSource(remoteArticles) {
+            manageData(data.value ?: DataWrapper.Failure())?.let {
+                data.value = it
             }
+        }
+        return data
+    }
 
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onResponse(
-                call: Call<ArticlesResponse>,
-                response: Response<ArticlesResponse>
-            ) {
-                if (response.isSuccessful) {
-                    liveData.postValue(response.body()?.articles)
-                    localDataSource.updateArticles(response.body()?.articles)
+    private fun manageData(incomingData: DataWrapper<List<Article>>): DataWrapper<List<Article>>? {
+        if (incomingData is DataWrapper.Loading)
+            return null
 
-                } else
-                    liveData.postValue(localDataSource.getArticles().value?.data)
-            }
-        })
+        val articles = ArrayList<Article>()
+
+        when (incomingData) {
+            is DataWrapper.Success -> articles.addAll(incomingData.data ?: arrayListOf())
+            is DataWrapper.Failure -> return DataWrapper.Failure(incomingData.message)
+            else -> {}
+        }
+
+        return DataWrapper.Success(articles)
     }
 }

@@ -58,18 +58,25 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
     private fun initViewModel() {
         val viewModelProviderFactory: HomeViewModelProviderFactory by kodein.instance()
 
-        val viewModel = ViewModelProviders.of(this, viewModelProviderFactory)
-            .get(HomeActivityViewModel::class.java)
+        val viewModel =
+            ViewModelProviders.of(this, viewModelProviderFactory)[HomeActivityViewModel::class.java]
 
-        val dataRepo = DataRepo(kodein)
-        dataRepo.getArticles(viewModel.getLiveDataObserver())
+        val dataRepo: DataRepo by instance()
+        dataRepo.getArticles()
 
         viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleAdapter)
+        loadingDelay()
+
+        viewModel.liveData.observe(this) {
+            if (it != null)
+                viewModel.getArticlesData()
+            else
+                Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show()
+        }
 
         viewModel.getLiveDataObserver().observe(this, Observer {
-            loadingDelay()
             if (it != null)
-                viewModel.setArticleAdapterData(it)
+                viewModel.getArticlesData()
             else
                 Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show()
         })
@@ -93,16 +100,4 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         }, 500)
     }
 
-    //Just used for testing
-    private fun createDummyArticles(viewModel: HomeActivityViewModel) {
-        val article = Article(
-            "Khaled",
-            "Test Article",
-            "Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description.",
-            "www.google.com",
-            "",
-            "Some Date"
-        )
-        viewModel.liveData.value = listOf(article, article, article, article, article)
-    }
 }

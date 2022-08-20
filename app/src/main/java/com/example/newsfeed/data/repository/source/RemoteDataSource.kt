@@ -15,9 +15,11 @@ import org.kodein.di.generic.instance
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 
 class RemoteDataSource(override val kodein: Kodein) : KodeinAware {
-    private val retroService : RetroServiceInterface by instance()
+    private val retroInstance: Retrofit by instance()
+    private val retroService = retroInstance.create(RetroServiceInterface::class.java)
 
     private val call = retroService.getArticleResponse(RetroInstance.source, RetroInstance.API_KEY)
 

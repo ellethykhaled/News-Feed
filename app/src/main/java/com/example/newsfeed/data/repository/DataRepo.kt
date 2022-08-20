@@ -8,6 +8,7 @@ import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.data.repository.source.api.RetroInstance
 import com.example.newsfeed.data.repository.source.api.RetroServiceInterface
 import com.example.newsfeed.data.repository.source.LocalDataSource
+import com.example.newsfeed.data.repository.source.RemoteDataSource
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import retrofit2.Call
@@ -18,6 +19,8 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
 
     private val localDataSource = LocalDataSource(kodein)
 
+    private val remoteDataSource = RemoteDataSource(kodein)
+
     fun getArticles(liveData: MutableLiveData<List<Article>>) {
         val retroInstance = RetroInstance.getRetroInstance()
         val retroService = retroInstance.create(RetroServiceInterface::class.java)
@@ -27,7 +30,7 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
         call.enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
                 Log.e("Error", t.toString())
-                liveData.postValue(localDataSource.getArticles())
+                liveData.postValue(localDataSource.getArticles().value?.data)
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -40,7 +43,7 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
                     localDataSource.updateArticles(response.body()?.articles)
 
                 } else
-                    liveData.postValue(localDataSource.getArticles())
+                    liveData.postValue(localDataSource.getArticles().value?.data)
             }
         })
     }

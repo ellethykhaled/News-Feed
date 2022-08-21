@@ -38,7 +38,7 @@ class RemoteDataSource(override val kodein: Kodein) : KodeinAware {
                 response: Response<ArticlesResponse>
             ) {
                 if (response.isSuccessful)
-                    data.value = DataWrapper.Success(response.body()?.articles ?: arrayListOf())
+                    data.value = DataWrapper.Success(response.body()?.articles ?: arrayListOf(), DataWrapper.REMOTE_SUCCESS)
                 else
                     data.value = DataWrapper.Failure(response.message())
             }

@@ -32,7 +32,7 @@ class LocalDataSource(override val kodein: Kodein) : KodeinAware {
         if (articles == null)
             data.value = DataWrapper.Failure("No Local Data Found")
         else
-            data.value = DataWrapper.Success(articles)
+            data.value = DataWrapper.Success(articles, DataWrapper.LOCAL_SUCCESS)
 
         return data
     }

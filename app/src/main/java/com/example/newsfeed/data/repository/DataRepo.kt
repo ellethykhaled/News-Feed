@@ -25,6 +25,8 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
         mediatorLiveData.addSource(remoteArticles) {
             manageData(remoteArticles.value ?: DataWrapper.Failure())?.let {
                 mediatorLiveData.value = it
+                if (it.data != null)
+                    localDataSource.updateArticles(it.data)
             }
         }
         mediatorLiveData.addSource(localArticles) {
@@ -42,7 +44,7 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
             is DataWrapper.Success -> {
                 val articles = ArrayList<Article>()
                 articles.addAll(incomingData.data ?: arrayListOf())
-                DataWrapper.Success(articles)
+                DataWrapper.Success(articles, incomingData.message)
             }
         }
     }

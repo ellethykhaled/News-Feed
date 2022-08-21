@@ -31,6 +31,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var viewModel: HomeActivityViewModel
+    private var initialToastMessage = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +83,12 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
                 "Error Loading Data",
                 Toast.LENGTH_SHORT
             ).show()
-            is DataWrapper.Success -> it.data?.let { bindArticlesData(it) }
+            is DataWrapper.Success -> {
+                it.data?.let {
+                    bindArticlesData(it)
+                }
+                initialToastMessage = "Data Fetched " + it.message + "ly"
+            }
         }
     }
 
@@ -107,6 +113,12 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         Handler().postDelayed({
             binding.apiResponseProgressBar.visibility = GONE
             binding.recyclerViewArticle.visibility = VISIBLE
+            if (initialToastMessage != "")
+                Toast.makeText(
+                    this,
+                    initialToastMessage,
+                    Toast.LENGTH_SHORT
+                ).show()
         }, 1000)
     }
 

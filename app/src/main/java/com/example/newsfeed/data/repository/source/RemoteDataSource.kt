@@ -27,7 +27,7 @@ class RemoteDataSource(override val kodein: Kodein) : KodeinAware {
         val data = MutableLiveData<DataWrapper<List<Article>>>()
         data.value = DataWrapper.Loading()
 
-        call.enqueue(object : Callback<ArticlesResponse> {
+        call.clone().enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
                 data.value = DataWrapper.Failure(t.toString())
             }

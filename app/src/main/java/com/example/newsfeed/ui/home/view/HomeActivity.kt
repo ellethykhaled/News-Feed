@@ -32,6 +32,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var viewModel: HomeActivityViewModel
     private var initialToastMessage = ""
+    private var refreshedBefore = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,11 +51,15 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
 
         binding.recyclerViewArticle.apply {
             adapter = ArticleAdapter(emptyList(), this@HomeActivity)
-
             layoutManager = manager
         }
 
         binding.recyclerViewArticle.addItemDecoration(HomeListItemDecorator(20))
+
+        binding.refresher.setOnRefreshListener {
+            viewModel.getArticlesData()
+            refreshedBefore = true
+        }
 
         loadingDelay()
     }
@@ -84,10 +89,16 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
                 Toast.LENGTH_SHORT
             ).show()
             is DataWrapper.Success -> {
+                binding.refresher.isRefreshing = false
+                if (it.message == DataWrapper.LOCAL_SUCCESS && refreshedBefore)
+                    return
                 it.data?.let {
                     bindArticlesData(it)
                 }
-                initialToastMessage = "Data Fetched " + it.message + "ly"
+                initialToastMessage = if (it.message == DataWrapper.LOCAL_SUCCESS)
+                    "Offline Mode"
+                else
+                    "Online"
             }
         }
     }

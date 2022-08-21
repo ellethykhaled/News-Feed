@@ -2,7 +2,6 @@ package com.example.newsfeed.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.data.repository.source.LocalDataSource
 import com.example.newsfeed.data.repository.source.RemoteDataSource
@@ -16,32 +15,35 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
     private val remoteDataSource = RemoteDataSource(kodein)
 
     fun getArticles(): LiveData<DataWrapper<List<Article>>> {
-        val data = MediatorLiveData<DataWrapper<List<Article>>>()
+        val mediatorLiveData = MediatorLiveData<DataWrapper<List<Article>>>()
 
-        data.value = DataWrapper.Loading()
+        mediatorLiveData.value = DataWrapper.Loading()
 
         val remoteArticles = remoteDataSource.getArticles()
+        val localArticles = localDataSource.getArticles()
 
-        data.addSource(remoteArticles) {
-            manageData(data.value ?: DataWrapper.Failure())?.let {
-                data.value = it
+        mediatorLiveData.addSource(remoteArticles) {
+            manageData(remoteArticles.value ?: DataWrapper.Failure())?.let {
+                mediatorLiveData.value = it
             }
         }
-        return data
+        mediatorLiveData.addSource(localArticles) {
+            manageData(localArticles.value ?: DataWrapper.Failure())?.let {
+                mediatorLiveData.value = it
+            }
+        }
+        return mediatorLiveData
     }
 
     private fun manageData(incomingData: DataWrapper<List<Article>>): DataWrapper<List<Article>>? {
-        if (incomingData is DataWrapper.Loading)
-            return null
-
-        val articles = ArrayList<Article>()
-
-        when (incomingData) {
-            is DataWrapper.Success -> articles.addAll(incomingData.data ?: arrayListOf())
-            is DataWrapper.Failure -> return DataWrapper.Failure(incomingData.message)
-            else -> {}
+        return when (incomingData) {
+            is DataWrapper.Loading -> null
+            is DataWrapper.Failure -> DataWrapper.Failure(incomingData.message)
+            is DataWrapper.Success -> {
+                val articles = ArrayList<Article>()
+                articles.addAll(incomingData.data ?: arrayListOf())
+                DataWrapper.Success(articles)
+            }
         }
-
-        return DataWrapper.Success(articles)
     }
 }

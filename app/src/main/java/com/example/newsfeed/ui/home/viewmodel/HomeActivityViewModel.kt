@@ -1,8 +1,5 @@
 package com.example.newsfeed.ui.home.viewmodel
 
-import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -12,10 +9,6 @@ import com.example.newsfeed.data.repository.DataWrapper
 import com.example.newsfeed.ui.home.adapter.ArticleAdapter
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
-import java.lang.Exception
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 import androidx.lifecycle.LiveData
 
 class HomeActivityViewModel(override val kodein: Kodein, dataRepo: DataRepo) : ViewModel(), KodeinAware {

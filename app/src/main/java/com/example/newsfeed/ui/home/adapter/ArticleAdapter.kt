@@ -1,10 +1,14 @@
 package com.example.newsfeed.ui.home.adapter
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.databinding.ItemArticleCardViewBinding
+import com.example.newsfeed.utilis.formatDate
 
 class ArticleAdapter(private var articles: List<Article>, private val callback: Callback) :
     RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
@@ -23,10 +27,13 @@ class ArticleAdapter(private var articles: List<Article>, private val callback: 
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setArticles(articles: List<Article>) {
+        formatDate(articles)
         this.articles = articles
+        notifyDataSetChanged()
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

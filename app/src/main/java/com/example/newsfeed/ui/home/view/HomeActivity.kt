@@ -1,5 +1,6 @@
 package com.example.newsfeed.ui.home.view
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,13 +11,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsfeed.R
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.DataRepo
+import com.example.newsfeed.data.repository.DataWrapper
 import com.example.newsfeed.databinding.ActivityHomeBinding
 import com.example.newsfeed.ui.details.view.DetailsActivity
 import com.example.newsfeed.ui.home.HomeViewModelProviderFactory
@@ -31,17 +31,22 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
     override val kodein by kodein()
 
     private lateinit var binding: ActivityHomeBinding
-    private lateinit var manager: RecyclerView.LayoutManager
+    private lateinit var viewModel: HomeActivityViewModel
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.hide()
+        initUi()
+        initViewModel()
+        viewModel.getArticlesData()
+    }
 
+    private fun initUi() {
+        supportActionBar?.hide()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-        manager = LinearLayoutManager(this)
+        val manager = LinearLayoutManager(this)
 
         binding.recyclerViewArticle.apply {
             adapter = ArticleAdapter(emptyList(), this@HomeActivity)
@@ -51,37 +56,43 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
 
         binding.recyclerViewArticle.addItemDecoration(HomeListItemDecorator(20))
 
-        initViewModel()
+        loadingDelay()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
         val viewModelProviderFactory: HomeViewModelProviderFactory by kodein.instance()
 
-        val viewModel =
+        viewModel =
             ViewModelProviders.of(this, viewModelProviderFactory)[HomeActivityViewModel::class.java]
 
-        val dataRepo: DataRepo by instance()
-        dataRepo.getArticles()
-
         viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleAdapter)
-        loadingDelay()
 
         viewModel.liveData.observe(this) {
-            if (it != null)
-                viewModel.getArticlesData()
-            else
-                Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show()
+            onLiveDataChange(it)
         }
-
-        viewModel.getLiveDataObserver().observe(this, Observer {
-            if (it != null)
-                viewModel.getArticlesData()
-            else
-                Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show()
-        })
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun onLiveDataChange(it: DataWrapper<List<Article>>) {
+        when (it) {
+            is DataWrapper.Loading -> {}
+            is DataWrapper.Failure -> Toast.makeText(
+                this,
+                "Error Loading Data",
+                Toast.LENGTH_SHORT
+            ).show()
+            is DataWrapper.Success -> it.data?.let { bindArticlesData(it) }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("NotifyDataSetChanged")
+    private fun bindArticlesData(articleList: List<Article>) {
+        val adapter = binding.recyclerViewArticle.adapter as? ArticleAdapter
+        adapter?.setArticles(articleList)
+    }
 
     private fun openDetailsActivity(item: Article) {
         val intent = Intent(this, DetailsActivity::class.java)
@@ -97,7 +108,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         Handler().postDelayed({
             binding.apiResponseProgressBar.visibility = GONE
             binding.recyclerViewArticle.visibility = VISIBLE
-        }, 500)
+        }, 1000)
     }
 
 }

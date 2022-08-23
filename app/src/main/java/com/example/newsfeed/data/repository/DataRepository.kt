@@ -8,12 +8,15 @@ import com.example.newsfeed.data.repository.source.RemoteDataSource
 import com.example.newsfeed.utilis.DataWrapper
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
+import org.kodein.di.generic.instance
 
 class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, KodeinAware {
 
     private val localDataSource = LocalDataSource(kodein)
 
     private val remoteDataSource = RemoteDataSource(kodein)
+
+    private val cachedData: CachedData by kodein.instance()
 
     override fun getArticles(): LiveData<DataWrapper<List<Article>>> {
         val mediatorLiveData = MediatorLiveData<DataWrapper<List<Article>>>()
@@ -29,8 +32,10 @@ class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, Kod
                 DataWrapper.REMOTE
             )?.let {
                 mediatorLiveData.value = it
-                if (it.data != null)
+                if (it.data != null) {
                     localDataSource.updateArticles(it.data)
+                    cachedData.cachedArticles = it.data
+                }
             }
         }
         mediatorLiveData.addSource(localArticles) {
@@ -39,6 +44,7 @@ class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, Kod
                 DataWrapper.LOCAL
             )?.let {
                 mediatorLiveData.value = it
+                cachedData.cachedArticles = it.data
             }
         }
         return mediatorLiveData

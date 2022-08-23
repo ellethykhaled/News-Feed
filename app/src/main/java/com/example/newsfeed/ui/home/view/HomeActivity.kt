@@ -122,14 +122,14 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         articleRecyclerViewAdapter = recyclerViewAdapter
     }
 
-    private fun openDetailsActivity(item: Article) {
+    private fun openDetailsActivity(articlePosition: Int) {
         val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(DetailsActivity.ARTICLE_DATA, item)
+        intent.putExtra(DetailsActivity.ARTICLE_POSITION, articlePosition)
         startActivity(intent)
     }
 
-    override fun onArticleClick(item: Article) {
-        openDetailsActivity(item)
+    override fun onArticleClick(articlePosition: Int) {
+        openDetailsActivity(articlePosition)
     }
 
     private fun displayFirstConnectionToast() {

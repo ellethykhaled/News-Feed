@@ -21,7 +21,7 @@ class ArticleRecyclerViewAdapter(private var articles: List<Article>, private va
             itemBinding.article = itemViewModel
 
             itemBinding.root.setOnClickListener {
-                callback.onArticleClick(itemViewModel)
+                callback.onArticleClick(position)
             }
             itemBinding.executePendingBindings()
         }
@@ -49,6 +49,6 @@ class ArticleRecyclerViewAdapter(private var articles: List<Article>, private va
     override fun getItemCount() = articles.size
 
     interface Callback {
-        fun onArticleClick(item: Article)
+        fun onArticleClick(articleUrl: Int)
     }
 }

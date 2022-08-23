@@ -1,6 +1,7 @@
 package com.example.newsfeed.common
 
 import android.app.Application
+import com.example.newsfeed.data.repository.CachedData
 import com.example.newsfeed.data.repository.DataRepository
 import com.example.newsfeed.data.repository.source.api.RetroInstance
 import com.example.newsfeed.data.repository.source.database.ArticleDatabase
@@ -20,6 +21,8 @@ class NewsFeedApplication : Application(), KodeinAware {
         bind<DataRepository>() with singleton { DataRepository(kodein) }
 
         bind<ArticleDatabase>() with singleton { ArticleDatabase.getDatabase(this@NewsFeedApplication) }
+
+        bind<CachedData>() with singleton { CachedData() }
 
         bind<Retrofit>() with provider { RetroInstance.getRetroInstance() }
 

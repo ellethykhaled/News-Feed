@@ -3,16 +3,17 @@ package com.example.newsfeed.data.repository.source
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.DataWrapper
+import com.example.newsfeed.data.repository.DataRepositoryInterface
+import com.example.newsfeed.utilis.DataWrapper
 import com.example.newsfeed.data.repository.source.database.ArticleDatabase
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 
-class LocalDataSource(override val kodein: Kodein) : KodeinAware {
+class LocalDataSource(override val kodein: Kodein) : DataRepositoryInterface, KodeinAware {
     private val database: ArticleDatabase by instance()
 
-    fun updateArticles(articles: List<Article>?) {
+    override fun updateArticles(articles: List<Article>?) {
         val articleDao = database.articleDao()
         articleDao.getArticlesFromDB()?.forEach {
             articleDao.deleteArticle(it)
@@ -22,7 +23,7 @@ class LocalDataSource(override val kodein: Kodein) : KodeinAware {
         }
     }
 
-    fun getArticles(): LiveData<DataWrapper<List<Article>>> {
+    override fun getArticles(): LiveData<DataWrapper<List<Article>>> {
         val data = MutableLiveData<DataWrapper<List<Article>>>()
         data.value = DataWrapper.Loading()
 
@@ -32,7 +33,7 @@ class LocalDataSource(override val kodein: Kodein) : KodeinAware {
         if (articles == null)
             data.value = DataWrapper.Failure("No Local Data Found")
         else
-            data.value = DataWrapper.Success(articles, DataWrapper.LOCAL_SUCCESS)
+            data.value = DataWrapper.Success(articles, null, DataWrapper.LOCAL_SUCCESS)
 
         return data
     }

@@ -4,26 +4,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.DataRepo
-import com.example.newsfeed.data.repository.DataWrapper
-import com.example.newsfeed.ui.home.adapter.ArticleAdapter
-import org.kodein.di.Kodein
-import org.kodein.di.KodeinAware
+import com.example.newsfeed.data.repository.DataRepository
+import com.example.newsfeed.utilis.DataWrapper
+import com.example.newsfeed.ui.home.view.adapter.ArticleRecyclerViewAdapter
 import androidx.lifecycle.LiveData
 
-class HomeActivityViewModel(override val kodein: Kodein, dataRepo: DataRepo) : ViewModel(), KodeinAware {
+class HomeActivityViewModel(dataRepository: DataRepository) : ViewModel() {
 
     private val loadData: MutableLiveData<Boolean> = MutableLiveData()
 
     val liveData: LiveData<DataWrapper<List<Article>>> = Transformations.switchMap(loadData) {
-        dataRepo.getArticles()
+        dataRepository.getArticles()
     }
 
-    lateinit var articleAdapter: ArticleAdapter
+    lateinit var articleRecyclerViewAdapter: ArticleRecyclerViewAdapter
 
     @JvmName("setArticleAdapter1")
-    fun setArticleAdapter(adapter: ArticleAdapter) {
-        articleAdapter = adapter
+    fun setArticleAdapter(recyclerViewAdapter: ArticleRecyclerViewAdapter) {
+        articleRecyclerViewAdapter = recyclerViewAdapter
     }
 
     fun getArticlesData() {

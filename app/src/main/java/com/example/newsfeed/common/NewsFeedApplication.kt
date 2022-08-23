@@ -1,7 +1,7 @@
-package com.example.newsfeed
+package com.example.newsfeed.common
 
 import android.app.Application
-import com.example.newsfeed.data.repository.DataRepo
+import com.example.newsfeed.data.repository.DataRepository
 import com.example.newsfeed.data.repository.source.api.RetroInstance
 import com.example.newsfeed.data.repository.source.database.ArticleDatabase
 import com.example.newsfeed.ui.home.HomeViewModelProviderFactory
@@ -17,7 +17,7 @@ class NewsFeedApplication : Application(), KodeinAware {
     override val kodein = Kodein.lazy {
         import(androidXModule(this@NewsFeedApplication))
 
-        bind<DataRepo>() with singleton { DataRepo(kodein) }
+        bind<DataRepository>() with singleton { DataRepository(kodein) }
 
         bind<ArticleDatabase>() with singleton { ArticleDatabase.getDatabase(this@NewsFeedApplication) }
 

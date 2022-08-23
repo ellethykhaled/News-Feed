@@ -14,20 +14,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsfeed.R
+import com.example.newsfeed.common.BasicActivity
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.DataWrapper
+import com.example.newsfeed.utilis.DataWrapper
 import com.example.newsfeed.databinding.ActivityHomeBinding
 import com.example.newsfeed.ui.details.view.DetailsActivity
 import com.example.newsfeed.ui.home.HomeViewModelProviderFactory
-import com.example.newsfeed.ui.home.adapter.ArticleAdapter
+import com.example.newsfeed.ui.home.view.adapter.ArticleRecyclerViewAdapter
 import com.example.newsfeed.ui.home.viewmodel.HomeActivityViewModel
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
-class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
-
-    override val kodein by kodein()
+class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var viewModel: HomeActivityViewModel
@@ -47,14 +44,11 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         supportActionBar?.hide()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-        val manager = LinearLayoutManager(this)
 
         binding.recyclerViewArticle.apply {
-            adapter = ArticleAdapter(emptyList(), this@HomeActivity)
-            layoutManager = manager
+            adapter = ArticleRecyclerViewAdapter(emptyList(), this@HomeActivity)
+            addItemDecoration(HomeListItemDecorator(20))
         }
-
-        binding.recyclerViewArticle.addItemDecoration(HomeListItemDecorator(20))
 
         binding.refresher.setOnRefreshListener {
             viewModel.getArticlesData()
@@ -72,7 +66,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
         viewModel =
             ViewModelProviders.of(this, viewModelProviderFactory)[HomeActivityViewModel::class.java]
 
-        viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleAdapter)
+        viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleRecyclerViewAdapter)
 
         viewModel.liveData.observe(this) {
             onLiveDataChange(it)
@@ -106,7 +100,7 @@ class HomeActivity : AppCompatActivity(), ArticleAdapter.Callback, KodeinAware {
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("NotifyDataSetChanged")
     private fun bindArticlesData(articleList: List<Article>) {
-        val adapter = binding.recyclerViewArticle.adapter as? ArticleAdapter
+        val adapter = binding.recyclerViewArticle.adapter as? ArticleRecyclerViewAdapter
         adapter?.setArticles(articleList)
     }
 

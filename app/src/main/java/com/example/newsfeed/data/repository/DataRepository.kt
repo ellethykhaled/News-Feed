@@ -5,16 +5,17 @@ import androidx.lifecycle.MediatorLiveData
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.data.repository.source.LocalDataSource
 import com.example.newsfeed.data.repository.source.RemoteDataSource
+import com.example.newsfeed.utilis.DataWrapper
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 
-class DataRepo(override val kodein: Kodein) : KodeinAware {
+class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, KodeinAware {
 
     private val localDataSource = LocalDataSource(kodein)
 
     private val remoteDataSource = RemoteDataSource(kodein)
 
-    fun getArticles(): LiveData<DataWrapper<List<Article>>> {
+    override fun getArticles(): LiveData<DataWrapper<List<Article>>> {
         val mediatorLiveData = MediatorLiveData<DataWrapper<List<Article>>>()
 
         mediatorLiveData.value = DataWrapper.Loading()
@@ -23,28 +24,41 @@ class DataRepo(override val kodein: Kodein) : KodeinAware {
         val localArticles = localDataSource.getArticles()
 
         mediatorLiveData.addSource(remoteArticles) {
-            manageData(remoteArticles.value ?: DataWrapper.Failure())?.let {
+            manageData(
+                remoteArticles.value ?: DataWrapper.Failure(),
+                DataWrapper.REMOTE_SUCCESS
+            )?.let {
                 mediatorLiveData.value = it
                 if (it.data != null)
                     localDataSource.updateArticles(it.data)
             }
         }
         mediatorLiveData.addSource(localArticles) {
-            manageData(localArticles.value ?: DataWrapper.Failure())?.let {
+            manageData(
+                localArticles.value ?: DataWrapper.Failure(),
+                DataWrapper.LOCAL_SUCCESS
+            )?.let {
                 mediatorLiveData.value = it
             }
         }
         return mediatorLiveData
     }
 
-    private fun manageData(incomingData: DataWrapper<List<Article>>): DataWrapper<List<Article>>? {
+    override fun updateArticles(articles: List<Article>?) {
+        throw Exception("DataRepository doesn't update articles")
+    }
+
+    private fun manageData(
+        incomingData: DataWrapper<List<Article>>,
+        localSuccess: String
+    ): DataWrapper<List<Article>>? {
         return when (incomingData) {
             is DataWrapper.Loading -> null
             is DataWrapper.Failure -> DataWrapper.Failure(incomingData.message)
             is DataWrapper.Success -> {
                 val articles = ArrayList<Article>()
                 articles.addAll(incomingData.data ?: arrayListOf())
-                DataWrapper.Success(articles, incomingData.message)
+                DataWrapper.Success(articles, incomingData.message, localSuccess)
             }
         }
     }

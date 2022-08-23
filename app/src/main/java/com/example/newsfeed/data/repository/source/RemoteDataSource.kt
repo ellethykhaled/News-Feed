@@ -5,8 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.ArticlesResponse
-import com.example.newsfeed.data.repository.DataWrapper
+import com.example.newsfeed.data.repository.DataRepositoryInterface
+import com.example.newsfeed.data.repository.payload.articles.ArticlesResponse
+import com.example.newsfeed.utilis.DataWrapper
 import com.example.newsfeed.data.repository.source.api.RetroInstance
 import com.example.newsfeed.data.repository.source.api.RetroServiceInterface
 import org.kodein.di.Kodein
@@ -17,13 +18,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class RemoteDataSource(override val kodein: Kodein) : KodeinAware {
+class RemoteDataSource(override val kodein: Kodein) : DataRepositoryInterface, KodeinAware {
     private val retroInstance: Retrofit by instance()
     private val retroService = retroInstance.create(RetroServiceInterface::class.java)
 
     private val call = retroService.getArticleResponse(RetroInstance.source, RetroInstance.API_KEY)
 
-    fun getArticles(): LiveData<DataWrapper<List<Article>>> {
+    override fun getArticles(): LiveData<DataWrapper<List<Article>>> {
         val data = MutableLiveData<DataWrapper<List<Article>>>()
         data.value = DataWrapper.Loading()
 
@@ -38,11 +39,15 @@ class RemoteDataSource(override val kodein: Kodein) : KodeinAware {
                 response: Response<ArticlesResponse>
             ) {
                 if (response.isSuccessful)
-                    data.value = DataWrapper.Success(response.body()?.articles ?: arrayListOf(), DataWrapper.REMOTE_SUCCESS)
+                    data.value = DataWrapper.Success(response.body()?.articles ?: arrayListOf(), null, DataWrapper.REMOTE_SUCCESS)
                 else
                     data.value = DataWrapper.Failure(response.message())
             }
         })
         return data
+    }
+
+    override fun updateArticles(articles: List<Article>?) {
+        throw Exception("RemoteDataSource doesn't update articles")
     }
 }

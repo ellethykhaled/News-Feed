@@ -1,4 +1,4 @@
-package com.example.newsfeed.ui.home.adapter
+package com.example.newsfeed.ui.home.view.adapter
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -10,8 +10,8 @@ import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.databinding.ItemArticleCardViewBinding
 import com.example.newsfeed.utilis.formatDate
 
-class ArticleAdapter(private var articles: List<Article>, private val callback: Callback) :
-    RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+class ArticleRecyclerViewAdapter(private var articles: List<Article>, private val callback: Callback) :
+    RecyclerView.Adapter<ArticleRecyclerViewAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val itemBinding: ItemArticleCardViewBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
@@ -42,7 +42,7 @@ class ArticleAdapter(private var articles: List<Article>, private val callback: 
         return ViewHolder(listItemBinding)
     }
 
-    override fun onBindViewHolder(holder: ArticleAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ArticleRecyclerViewAdapter.ViewHolder, position: Int) {
         holder.bind(position)
     }
 

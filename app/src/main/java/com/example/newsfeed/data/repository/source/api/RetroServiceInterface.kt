@@ -1,6 +1,6 @@
 package com.example.newsfeed.data.repository.source.api
 
-import com.example.newsfeed.data.repository.ArticlesResponse
+import com.example.newsfeed.data.repository.payload.articles.ArticlesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

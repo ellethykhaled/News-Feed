@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
@@ -32,6 +33,7 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         initUi()
         initViewModel()
         viewModel.getArticlesData()
+        displayFirstConnectionToast()
     }
 
     private fun initUi() {
@@ -46,7 +48,6 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         binding.refresher.apply {
             setOnRefreshListener {
                 viewModel.getArticlesData()
-                viewModel.isOnlineBefore = true
             }
             isRefreshing = true
         }
@@ -72,30 +73,40 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         when (it) {
             is DataWrapper.Loading -> {}
             is DataWrapper.Failure -> {
-                if (!viewModel.isOnlineBefore && it.dataSource == DataWrapper.LOCAL)
-                    Toast.makeText(
-                        this,
-                        "Error Loading Data",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                val sendFailureErrorRemote =
+                    it.dataSource == DataWrapper.REMOTE && viewModel.isRemote
+                val sendFailureErrorLocal =
+                    it.dataSource == DataWrapper.LOCAL && !viewModel.isLocal
+                if (sendFailureErrorRemote)
+                    viewModel.isRemote = false
+                if (sendFailureErrorLocal)
+                    viewModel.isLocal = false
+                if (sendFailureErrorRemote || sendFailureErrorLocal)
+                    displayToast("Error Loading Data")
             }
             is DataWrapper.Success -> {
                 binding.refresher.isRefreshing = false
-                if (viewModel.isOnlineBefore)
+                if (viewModel.firstConnection) {
+                    bindNewData(it)
                     return
-                it.data?.let {
-                    bindArticlesData(it)
                 }
-                viewModel.changeToastMessage(it.dataSource)
                 if (it.dataSource == DataWrapper.REMOTE) {
-                    viewModel.isOnlineBefore = true
-                    Toast.makeText(
-                        this,
-                        viewModel.toastMessage,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    viewModel.isRemote = true
+                    displayToast(HomeActivityViewModel.ONLINE_MESSAGE)
+                    bindNewData(it)
+                } else if (it.dataSource == DataWrapper.LOCAL && !viewModel.isRemote) {
+                    viewModel.isLocal = true
+                    displayToast(HomeActivityViewModel.OFFLINE_MESSAGE)
+                    bindNewData(it)
                 }
             }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun bindNewData(it: DataWrapper<List<Article>>) {
+        it.data?.let {
+            bindArticlesData(it)
         }
     }
 
@@ -119,5 +130,23 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
 
     override fun onArticleClick(item: Article) {
         openDetailsActivity(item)
+    }
+
+    private fun displayFirstConnectionToast() {
+        Handler().postDelayed({
+            viewModel.firstConnection = false
+            if (viewModel.isRemote)
+                displayToast(HomeActivityViewModel.ONLINE_MESSAGE)
+            else if (viewModel.isLocal)
+                displayToast(HomeActivityViewModel.ONLINE_MESSAGE)
+        }, 750)
+    }
+
+    private fun displayToast(message: String) {
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

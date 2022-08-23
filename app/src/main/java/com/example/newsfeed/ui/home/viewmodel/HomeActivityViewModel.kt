@@ -16,18 +16,17 @@ class HomeActivityViewModel(dataRepository: DataRepository) : ViewModel() {
         dataRepository.getArticles()
     }
 
-    var toastMessage = ""
-    var isOnlineBefore = false
+    var isRemote = false
+    var isLocal = false
+    var firstConnection = true
 
     fun getArticlesData() {
         loadData.value = true
     }
 
-    fun changeToastMessage(dataSource: String?) {
-        toastMessage = if (dataSource == DataWrapper.LOCAL)
-            "Offline Mode"
-        else
-            "Online Mode"
+    companion object {
+        const val OFFLINE_MESSAGE = "Offline Mode"
+        const val ONLINE_MESSAGE = "Online Mode"
     }
 }
 

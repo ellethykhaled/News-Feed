@@ -25,8 +25,8 @@ class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, Kod
 
         mediatorLiveData.addSource(remoteArticles) {
             manageData(
-                remoteArticles.value ?: DataWrapper.Failure(),
-                DataWrapper.REMOTE_SUCCESS
+                remoteArticles.value ?: DataWrapper.Failure(dataSource = DataWrapper.REMOTE),
+                DataWrapper.REMOTE
             )?.let {
                 mediatorLiveData.value = it
                 if (it.data != null)
@@ -35,8 +35,8 @@ class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, Kod
         }
         mediatorLiveData.addSource(localArticles) {
             manageData(
-                localArticles.value ?: DataWrapper.Failure(),
-                DataWrapper.LOCAL_SUCCESS
+                localArticles.value ?: DataWrapper.Failure(dataSource = DataWrapper.LOCAL),
+                DataWrapper.LOCAL
             )?.let {
                 mediatorLiveData.value = it
             }
@@ -54,7 +54,7 @@ class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, Kod
     ): DataWrapper<List<Article>>? {
         return when (incomingData) {
             is DataWrapper.Loading -> null
-            is DataWrapper.Failure -> DataWrapper.Failure(incomingData.message)
+            is DataWrapper.Failure -> DataWrapper.Failure(message = incomingData.message, dataSource = incomingData.dataSource)
             is DataWrapper.Success -> {
                 val articles = ArrayList<Article>()
                 articles.addAll(incomingData.data ?: arrayListOf())

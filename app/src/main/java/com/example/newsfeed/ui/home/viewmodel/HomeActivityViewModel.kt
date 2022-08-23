@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.data.repository.DataRepository
 import com.example.newsfeed.utilis.DataWrapper
-import com.example.newsfeed.ui.home.view.adapter.ArticleRecyclerViewAdapter
 import androidx.lifecycle.LiveData
 
 class HomeActivityViewModel(dataRepository: DataRepository) : ViewModel() {
@@ -17,15 +16,18 @@ class HomeActivityViewModel(dataRepository: DataRepository) : ViewModel() {
         dataRepository.getArticles()
     }
 
-    lateinit var articleRecyclerViewAdapter: ArticleRecyclerViewAdapter
-
-    @JvmName("setArticleAdapter1")
-    fun setArticleAdapter(recyclerViewAdapter: ArticleRecyclerViewAdapter) {
-        articleRecyclerViewAdapter = recyclerViewAdapter
-    }
+    var toastMessage = ""
+    var isOnlineBefore = false
 
     fun getArticlesData() {
         loadData.value = true
+    }
+
+    fun changeToastMessage(dataSource: String?) {
+        toastMessage = if (dataSource == DataWrapper.LOCAL)
+            "Offline Mode"
+        else
+            "Online Mode"
     }
 }
 

@@ -4,15 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsfeed.R
 import com.example.newsfeed.common.BasicActivity
 import com.example.newsfeed.data.model.Article
@@ -28,8 +23,7 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var viewModel: HomeActivityViewModel
-    private var initialToastMessage = ""
-    private var refreshedBefore = false
+    private lateinit var articleRecyclerViewAdapter: ArticleRecyclerViewAdapter
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,18 +38,18 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         supportActionBar?.hide()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-
         binding.recyclerViewArticle.apply {
             adapter = ArticleRecyclerViewAdapter(emptyList(), this@HomeActivity)
             addItemDecoration(HomeListItemDecorator(20))
         }
 
-        binding.refresher.setOnRefreshListener {
-            viewModel.getArticlesData()
-            refreshedBefore = true
+        binding.refresher.apply {
+            setOnRefreshListener {
+                viewModel.getArticlesData()
+                viewModel.isOnlineBefore = true
+            }
+            isRefreshing = true
         }
-
-        loadingDelay()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -66,7 +60,7 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         viewModel =
             ViewModelProviders.of(this, viewModelProviderFactory)[HomeActivityViewModel::class.java]
 
-        viewModel.setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleRecyclerViewAdapter)
+        setArticleAdapter(binding.recyclerViewArticle.adapter as ArticleRecyclerViewAdapter)
 
         viewModel.liveData.observe(this) {
             onLiveDataChange(it)
@@ -77,22 +71,30 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
     private fun onLiveDataChange(it: DataWrapper<List<Article>>) {
         when (it) {
             is DataWrapper.Loading -> {}
-            is DataWrapper.Failure -> Toast.makeText(
-                this,
-                "Error Loading Data",
-                Toast.LENGTH_SHORT
-            ).show()
+            is DataWrapper.Failure -> {
+                if (!viewModel.isOnlineBefore && it.dataSource == DataWrapper.LOCAL)
+                    Toast.makeText(
+                        this,
+                        "Error Loading Data",
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
             is DataWrapper.Success -> {
                 binding.refresher.isRefreshing = false
-                if (it.message == DataWrapper.LOCAL_SUCCESS && refreshedBefore)
+                if (viewModel.isOnlineBefore)
                     return
                 it.data?.let {
                     bindArticlesData(it)
                 }
-                initialToastMessage = if (it.message == DataWrapper.LOCAL_SUCCESS)
-                    "Offline Mode"
-                else
-                    "Online"
+                viewModel.changeToastMessage(it.dataSource)
+                if (it.dataSource == DataWrapper.REMOTE) {
+                    viewModel.isOnlineBefore = true
+                    Toast.makeText(
+                        this,
+                        viewModel.toastMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -104,6 +106,11 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
         adapter?.setArticles(articleList)
     }
 
+    @JvmName("setArticleAdapter1")
+    fun setArticleAdapter(recyclerViewAdapter: ArticleRecyclerViewAdapter) {
+        articleRecyclerViewAdapter = recyclerViewAdapter
+    }
+
     private fun openDetailsActivity(item: Article) {
         val intent = Intent(this, DetailsActivity::class.java)
         intent.putExtra(DetailsActivity.ARTICLE_DATA, item)
@@ -113,18 +120,4 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
     override fun onArticleClick(item: Article) {
         openDetailsActivity(item)
     }
-
-    private fun loadingDelay() {
-        Handler().postDelayed({
-            binding.apiResponseProgressBar.visibility = GONE
-            binding.recyclerViewArticle.visibility = VISIBLE
-            if (initialToastMessage != "")
-                Toast.makeText(
-                    this,
-                    initialToastMessage,
-                    Toast.LENGTH_SHORT
-                ).show()
-        }, 1000)
-    }
-
 }

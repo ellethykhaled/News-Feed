@@ -31,9 +31,10 @@ class LocalDataSource(override val kodein: Kodein) : DataRepositoryInterface, Ko
         val articles = articleDao.getArticlesFromDB()
 
         if (articles == null)
-            data.value = DataWrapper.Failure("No Local Data Found")
+            data.value =
+                DataWrapper.Failure("No Local Data Found", dataSource = DataWrapper.LOCAL)
         else
-            data.value = DataWrapper.Success(articles, null, DataWrapper.LOCAL_SUCCESS)
+            data.value = DataWrapper.Success(articles, null, DataWrapper.LOCAL)
 
         return data
     }

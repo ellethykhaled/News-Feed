@@ -30,7 +30,7 @@ class RemoteDataSource(override val kodein: Kodein) : DataRepositoryInterface, K
 
         call.clone().enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>, t: Throwable) {
-                data.value = DataWrapper.Failure(t.toString())
+                data.value = DataWrapper.Failure(t.toString(), dataSource = DataWrapper.REMOTE)
             }
 
             @RequiresApi(Build.VERSION_CODES.O)
@@ -39,9 +39,9 @@ class RemoteDataSource(override val kodein: Kodein) : DataRepositoryInterface, K
                 response: Response<ArticlesResponse>
             ) {
                 if (response.isSuccessful)
-                    data.value = DataWrapper.Success(response.body()?.articles ?: arrayListOf(), null, DataWrapper.REMOTE_SUCCESS)
+                    data.value = DataWrapper.Success(response.body()?.articles ?: arrayListOf(), null, DataWrapper.REMOTE)
                 else
-                    data.value = DataWrapper.Failure(response.message())
+                    data.value = DataWrapper.Failure(response.message(), dataSource = DataWrapper.REMOTE)
             }
         })
         return data

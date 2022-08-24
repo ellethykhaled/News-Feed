@@ -4,16 +4,19 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import com.example.newsfeed.R
 import com.example.newsfeed.common.BasicActivity
 import com.example.newsfeed.data.model.Article
-import com.example.newsfeed.data.repository.CachedData
 import com.example.newsfeed.databinding.ActivityDetailsBinding
+import com.example.newsfeed.ui.details.viewmodel.DetailsActivityViewModel
+import com.example.newsfeed.ui.home.ViewModelProviderFactory
 import org.kodein.di.generic.instance
 
 class DetailsActivity : BasicActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
+    private lateinit var viewModel: DetailsActivityViewModel
 
     private lateinit var chosenArticle: Article
 
@@ -26,7 +29,15 @@ class DetailsActivity : BasicActivity() {
 
         supportActionBar?.hide()
 
+        initViewModel()
         initUI()
+    }
+
+    private fun initViewModel() {
+        val viewModelProviderFactory: ViewModelProviderFactory by kodein.instance()
+        viewModel =
+            ViewModelProviders.of(this, viewModelProviderFactory)[DetailsActivityViewModel::class.java]
+
     }
 
     private fun initUI() {
@@ -34,9 +45,8 @@ class DetailsActivity : BasicActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_details)
 
-        val cachedData: CachedData by kodein.instance()
+        chosenArticle = viewModel.getSpecificArticle(chosenArticlePosition)!!
 
-        chosenArticle = cachedData.cachedArticles?.get(chosenArticlePosition)!!
         binding.articleItem = chosenArticle
 
         binding.backButton.setOnClickListener {

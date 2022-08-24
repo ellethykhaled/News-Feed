@@ -16,7 +16,7 @@ class DataRepository(override val kodein: Kodein) : DataRepositoryInterface, Kod
 
     private val remoteDataSource = RemoteDataSource(kodein)
 
-    private val cachedData: CachedData by kodein.instance()
+    val cachedData: CachedData by kodein.instance()
 
     override fun getArticles(): LiveData<DataWrapper<List<Article>>> {
         val mediatorLiveData = MediatorLiveData<DataWrapper<List<Article>>>()

@@ -15,7 +15,7 @@ import com.example.newsfeed.data.model.Article
 import com.example.newsfeed.utilis.DataWrapper
 import com.example.newsfeed.databinding.ActivityHomeBinding
 import com.example.newsfeed.ui.details.view.DetailsActivity
-import com.example.newsfeed.ui.home.HomeViewModelProviderFactory
+import com.example.newsfeed.ui.home.ViewModelProviderFactory
 import com.example.newsfeed.ui.home.view.adapter.ArticleRecyclerViewAdapter
 import com.example.newsfeed.ui.home.viewmodel.HomeActivityViewModel
 import org.kodein.di.generic.instance
@@ -56,7 +56,7 @@ class HomeActivity : BasicActivity(), ArticleRecyclerViewAdapter.Callback {
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
-        val viewModelProviderFactory: HomeViewModelProviderFactory by kodein.instance()
+        val viewModelProviderFactory: ViewModelProviderFactory by kodein.instance()
 
         viewModel =
             ViewModelProviders.of(this, viewModelProviderFactory)[HomeActivityViewModel::class.java]

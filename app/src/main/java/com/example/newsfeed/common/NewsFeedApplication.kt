@@ -5,7 +5,7 @@ import com.example.newsfeed.data.repository.CachedData
 import com.example.newsfeed.data.repository.DataRepository
 import com.example.newsfeed.data.repository.source.api.RetroInstance
 import com.example.newsfeed.data.repository.source.database.ArticleDatabase
-import com.example.newsfeed.ui.home.HomeViewModelProviderFactory
+import com.example.newsfeed.ui.home.ViewModelProviderFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -26,6 +26,6 @@ class NewsFeedApplication : Application(), KodeinAware {
 
         bind<Retrofit>() with provider { RetroInstance.getRetroInstance() }
 
-        bind() from provider { HomeViewModelProviderFactory(kodein) }
+        bind() from provider { ViewModelProviderFactory(kodein) }
     }
 }

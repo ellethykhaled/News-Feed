@@ -1,6 +1,7 @@
 package com.example.newsfeed.common
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.newsfeed.data.repository.CachedData
 import com.example.newsfeed.data.repository.DataRepository
 import com.example.newsfeed.data.repository.source.api.RetroInstance
@@ -15,6 +16,13 @@ import org.kodein.di.generic.singleton
 import retrofit2.Retrofit
 
 class NewsFeedApplication : Application(), KodeinAware {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
     override val kodein = Kodein.lazy {
         import(androidXModule(this@NewsFeedApplication))
 
